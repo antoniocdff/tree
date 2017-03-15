@@ -1,2 +1,5 @@
 # LOGS
 *.log
+
+# TMP FOLDER
+tmp/*
