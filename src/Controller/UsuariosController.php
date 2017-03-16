@@ -35,7 +35,7 @@ class UsuariosController extends AppController
     public function view($id = null)
     {
         $usuario = $this->Usuarios->get($id, [
-            'contain' => ['Usuarios', 'Albuns', 'Musicas']
+            'contain' => []
         ]);
 
         $this->set('usuario', $usuario);
@@ -59,7 +59,7 @@ class UsuariosController extends AppController
             }
             $this->Flash->error(__('The usuario could not be saved. Please, try again.'));
         }
-        $usuarios = $this->Usuarios->Usuarios->find('list', ['limit' => 200]);
+        $usuarios = $this->Usuarios->find('list', ['limit' => 200]);
         $this->set(compact('usuario', 'usuarios'));
         $this->set('_serialize', ['usuario']);
     }
@@ -85,7 +85,7 @@ class UsuariosController extends AppController
             }
             $this->Flash->error(__('The usuario could not be saved. Please, try again.'));
         }
-        $usuarios = $this->Usuarios->Usuarios->find('list', ['limit' => 200]);
+        $usuarios = $this->Usuarios->find('list', ['limit' => 200]);
         $this->set(compact('usuario', 'usuarios'));
         $this->set('_serialize', ['usuario']);
     }
@@ -108,5 +108,32 @@ class UsuariosController extends AppController
         }
 
         return $this->redirect(['action' => 'index']);
+    }
+
+    /**
+     * View tree method
+     *
+     * @param string|null $id Usuario id.
+     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
+     * @throws \Cake\Network\Exception\NotFoundException When record not found.
+     */
+    public function tree($id = null)
+    {
+        $usuario = $this->Usuarios->get($id, [
+            'contain' => ['Paifilhos', 'Maefilhos', 'Albuns', 'Musicas']
+        ]);
+        $filhos = [];
+        foreach ($usuario->paifilhos as $filho) {
+           array_push($filhos, $filho);
+        }
+
+        foreach ($usuario->maefilhos as $filho) {
+            array_push($filhos, $filho);
+        }
+
+
+        $this->set(compact('usuario'));
+        $this->set(compact('filhos'));
+        $this->set('_serialize', ['usuario', 'filhos']);
     }
 }

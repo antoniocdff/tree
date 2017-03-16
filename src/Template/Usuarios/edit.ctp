@@ -40,8 +40,8 @@
             echo $this->Form->control('data_criacao', ['empty' => true]);
             echo $this->Form->control('data_atualizacao', ['empty' => true]);
             echo $this->Form->control('data_acesso', ['empty' => true]);
-            echo $this->Form->control('pai_id');
-            echo $this->Form->control('mae_id');
+            echo $this->Form->control('pai_id', ['options' => $usuarios, 'empty' => true]);
+            echo $this->Form->control('mae_id', ['options' => $usuarios, 'empty' => true]);
             echo $this->Form->control('conjuge_id', ['options' => $usuarios, 'empty' => true]);
         ?>
     </fieldset>

@@ -58,6 +58,14 @@ class UsuariosTable extends Table
         $this->hasMany('Musicas', [
             'foreignKey' => 'usuario_id'
         ]);
+        $this->hasMany('Paifilhos', [
+            'className' => 'Usuarios',
+            'foreignKey' => 'pai_id'
+        ]);
+        $this->hasMany('Maefilhos', [
+            'className' => 'Usuarios',
+            'foreignKey' => 'mae_id'
+        ]);
     }
 
     /**
@@ -135,9 +143,9 @@ class UsuariosTable extends Table
     public function buildRules(RulesChecker $rules)
     {
         $rules->add($rules->isUnique(['email']));
-        $rules->add($rules->existsIn(['pai_id'], 'Usuarios'));
-        $rules->add($rules->existsIn(['mae_id'], 'Usuarios'));
-        $rules->add($rules->existsIn(['conjuge_id'], 'Usuarios'));
+        $rules->add($rules->existsIn(['pai_id'], 'Pai'));
+        $rules->add($rules->existsIn(['mae_id'], 'Mae'));
+        $rules->add($rules->existsIn(['conjuge_id'], 'Conjuge'));
 
         return $rules;
     }
