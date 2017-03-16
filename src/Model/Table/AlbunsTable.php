@@ -36,6 +36,13 @@ class AlbunsTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Image.Image', [
+            'path' => WWW_ROOT . 'assets',
+            'fields' => [
+                'images' => 'many',
+            ],
+        ]);
+
         $this->belongsTo('Usuarios', [
             'foreignKey' => 'usuario_id',
             'joinType' => 'INNER'

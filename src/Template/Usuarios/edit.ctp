@@ -22,7 +22,7 @@
     </ul>
 </nav>
 <div class="usuarios form large-9 medium-8 columns content">
-    <?= $this->Form->create($usuario) ?>
+    <?= $this->Form->create($usuario, array('enctype'=>'multipart/form-data')) ?>
     <fieldset>
         <legend><?= __('Edit Usuario') ?></legend>
         <?php
@@ -37,6 +37,10 @@
             echo $this->Form->control('telefone');
             echo $this->Form->control('fanhoso');
             echo $this->Form->control('mudo');
+            
+            echo $this->Form->input('image',array('type'=>'file'));
+
+
             echo $this->Form->control('data_criacao', ['empty' => true]);
             echo $this->Form->control('data_atualizacao', ['empty' => true]);
             echo $this->Form->control('data_acesso', ['empty' => true]);

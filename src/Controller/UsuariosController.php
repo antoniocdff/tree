@@ -3,6 +3,7 @@ namespace App\Controller;
 
 use App\Controller\AppController;
 
+use Cake\ORM\TableRegistry;
 /**
  * Usuarios Controller
  *
@@ -77,11 +78,34 @@ class UsuariosController extends AppController
             'contain' => []
         ]);
         if ($this->request->is(['patch', 'post', 'put'])) {
-            $usuario = $this->Usuarios->patchEntity($usuario, $this->request->getData());
+            $data = $this->request->getData();
+            $usuario = $this->Usuarios->patchEntity($usuario, $data);
             if ($this->Usuarios->save($usuario)) {
-                $this->Flash->success(__('The usuario has been saved.'));
 
-                return $this->redirect(['action' => 'index']);
+                if (is_uploaded_file($data['image']['tmp_name']))
+                {
+                    move_uploaded_file(
+                        $this->request->data['image']['tmp_name'],
+                        WWW_ROOT + '/Usuarios/'. $this->request->data['image']['name']
+                    );
+
+                    $imagem = TableRegistry::get('Images');
+                    $avatar = $imagem->newEntity();
+                    $avatar->field_index = 0;
+                    $avatar->model = "Usuarios";
+                    $avatar->foreing_key = $usuario->id;
+                    $avatar->field = "image";
+                    $avatar->filename = $data['image']['name'];
+                    $avatar->size = $data['image']['size'];
+                    $avatar->mime = $data['image']['type'];
+                    if ($imagem->save($avatar)) {
+                        $this->Flash->success(__('The usuario has been saved.'));
+                        return $this->redirect(['action' => 'index']);
+                    } else {
+                        $this->Flash->error(__('The user\'s avatar could not be saved. Please, try again.'));
+                    }
+                }
+                
             }
             $this->Flash->error(__('The usuario could not be saved. Please, try again.'));
         }
@@ -122,6 +146,17 @@ class UsuariosController extends AppController
         $usuario = $this->Usuarios->get($id, [
             'contain' => ['Paifilhos', 'Maefilhos', 'Albuns', 'Musicas']
         ]);
+
+        if($usuario->pai_id) {
+            $usuario->pai = $this->Usuarios->get($usuario->pai_id);
+        }
+        if($usuario->mae_id) {
+            $usuario->mae = $this->Usuarios->get($usuario->mae_id);
+        }
+        if($usuario->conjuge_id) {
+            $usuario->conjuge = $this->Usuarios->get($usuario->conjuge_id);
+        }
+
         $filhos = [];
         foreach ($usuario->paifilhos as $filho) {
            array_push($filhos, $filho);
@@ -130,7 +165,6 @@ class UsuariosController extends AppController
         foreach ($usuario->maefilhos as $filho) {
             array_push($filhos, $filho);
         }
-
 
         $this->set(compact('usuario'));
         $this->set(compact('filhos'));

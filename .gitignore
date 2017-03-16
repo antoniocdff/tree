@@ -2,4 +2,7 @@
 *.log
 
 # TMP FOLDER
-tmp/*
+/tmp/*
+
+# ASSETS FOLDER
+/assets/*

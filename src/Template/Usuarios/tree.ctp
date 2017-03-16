@@ -1,48 +1,9 @@
 <?php
 /**
- * CakePHP(tm) : Rapid Development Framework (http://cakephp.org)
- * Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- *
- * Licensed under The MIT License
- * For full copyright and license information, please see the LICENSE.txt
- * Redistributions of files must retain the above copyright notice.
- *
- * @copyright     Copyright (c) Cake Software Foundation, Inc. (http://cakefoundation.org)
- * @link          http://cakephp.org CakePHP(tm) Project
- * @since         0.10.0
- * @license       http://www.opensource.org/licenses/mit-license.php MIT License
- */
-use Cake\Cache\Cache;
-use Cake\Core\Configure;
-use Cake\Core\Plugin;
-use Cake\Datasource\ConnectionManager;
-use Cake\Error\Debugger;
-use Cake\Network\Exception\NotFoundException;
-
-$this->layout = false;
-
-if (!Configure::read('debug')):
-    throw new NotFoundException('Please replace src/Template/Pages/home.ctp with your own version.');
-endif;
+  * @var \App\View\AppView $this
+  */
 ?>
-<!DOCTYPE html>
-<html>
-<head>
-    <?= $this->Html->charset() ?>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>
-        Feedback Tree
-    </title>
-
-    <?= $this->Html->meta('icon') ?>
-    <?= $this->Html->css('base.css') ?>
-    <?= $this->Html->css('cake.css') ?>
-    <?= $this->Html->css('home.css') ?>
-    <link href="https://fonts.googleapis.com/css?family=Raleway:500i|Roboto:300,400,700|Roboto+Mono" rel="stylesheet">
-</head>
-<body class="home">
-
-<div class="usuarios view large-9 medium-8 columns ">
+<div class="usuarios view large-9 medium-8 columns content">
     <h3><?= h($usuario->id) ?></h3>
     <table class="vertical-table">
         <tr>
@@ -63,7 +24,7 @@ endif;
         </tr>
         <tr>
             <th scope="row"><?= __('Avatar') ?></th>
-            <td><?= h($usuario->avatar) ?></td>
+            <td><?php echo $this->Image->render($usuario->image); ?></td>
         </tr>
         <tr>
             <th scope="row"><?= __('Cidade') ?></th>
@@ -78,12 +39,16 @@ endif;
             <td><?= $this->Number->format($usuario->id) ?></td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Pai Id') ?></th>
-            <td><?= $this->Number->format($usuario->pai_id) ?></td>
+            <th scope="row"><?= __('Pai Foto') ?></th>
+            <td><?php echo $this->Image->render($usuario->pai->image); ?> </td>
         </tr>
         <tr>
-            <th scope="row"><?= __('Mae Id') ?></th>
-            <td><?= $this->Number->format($usuario->mae_id) ?></td>
+            <th scope="row"><?= __('Mae Foto') ?></th>
+            <td><?php echo $this->Image->render($usuario->mae->image); ?> </td>
+        </tr>
+        <tr>
+            <th scope="row"><?= __('Conjuge Foto') ?></th>
+            <td><?php echo $this->Image->render($usuario->conjuge->image); ?> </td>
         </tr>
         <tr>
             <th scope="row"><?= __('Data Nascimento') ?></th>
@@ -200,6 +165,3 @@ endif;
         <?php endif; ?>
     </div>
 </div>
-
-</body>
-</html>

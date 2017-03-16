@@ -40,6 +40,13 @@ class UsuariosTable extends Table
         $this->setDisplayField('id');
         $this->setPrimaryKey('id');
 
+        $this->addBehavior('Image.Image', [
+            'path' => WWW_ROOT . 'assets',
+            'fields' => [
+                'image' => 'one',
+            ],
+        ]);
+
         $this->belongsTo('Pai', [
             'className' => 'Usuarios',
             'foreignKey' => 'pai_id'
@@ -66,6 +73,8 @@ class UsuariosTable extends Table
             'className' => 'Usuarios',
             'foreignKey' => 'mae_id'
         ]);
+
+        
     }
 
     /**
