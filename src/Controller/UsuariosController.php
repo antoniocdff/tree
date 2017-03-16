@@ -4,6 +4,7 @@ namespace App\Controller;
 use App\Controller\AppController;
 
 use Cake\ORM\TableRegistry;
+use Cake\Validation\Validation;
 /**
  * Usuarios Controller
  *
@@ -11,6 +12,15 @@ use Cake\ORM\TableRegistry;
  */
 class UsuariosController extends AppController
 {
+
+    // public function beforeFilter(Event $event)
+    // {
+    //     parent::beforeFilter($event);
+    //     // Allow users to register and logout.
+    //     // You should not add the "login" action to allow list. Doing so would
+    //     // cause problems with normal functioning of AuthComponent.
+    //     $this->Auth->allow(['logout']);
+    // }
 
     /**
      * Index method
@@ -159,15 +169,55 @@ class UsuariosController extends AppController
 
         $filhos = [];
         foreach ($usuario->paifilhos as $filho) {
+            $filho = $this->Usuarios->get($filho->id);
            array_push($filhos, $filho);
         }
 
         foreach ($usuario->maefilhos as $filho) {
+            $filho = $this->Usuarios->get($filho->id);
             array_push($filhos, $filho);
         }
 
         $this->set(compact('usuario'));
         $this->set(compact('filhos'));
         $this->set('_serialize', ['usuario', 'filhos']);
+    }
+
+    public function login()
+    {
+        if ($this->request->is('post')) {
+            if (Validation::email($this->request->data['username'])) {
+                $this->Auth->config('authenticate', [
+                    'Form' => [
+                        'fields' => ['username' => 'email']
+                    ]
+                ]);
+                $this->Auth->constructAuthenticate();
+                $this->request->data['email'] = $this->request->data['username'];
+                //unset($this->request->data['username']);
+            }
+            $user = $this->Auth->identify();
+            if ($user) {
+                $this->Auth->setUser($user);
+                return $this->redirect($this->Auth->redirectUrl());
+            }
+            $this->Flash->error(__('Invalid username or password, try again'));
+        }
+    }
+
+
+    // public function login() {
+    //     if($this->request->is('post')) {
+    //         if(!$this->Auth->login()) {
+    //             $this->Session->setFlash(__('Invalid username or password, try again'));
+    //         } else {
+    //             $this->redirect($this->Auth->redirect());
+    //         }
+    //     }
+    // }
+
+    public function logout()
+    {
+        return $this->redirect($this->Auth->logout());
     }
 }

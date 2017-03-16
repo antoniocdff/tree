@@ -153,12 +153,16 @@
         <table cellpadding="0" cellspacing="0">
             <tr>
                 <th scope="col"><?= __('Id') ?></th>
+                <th scope="col"><?= __('Nome') ?></th>
                 <th scope="col"><?= __('Email') ?></th>
+                <th scope="col"><?= __('Avatar') ?></th>
             </tr>
             <?php foreach ($filhos as $filho): ?>
             <tr>
                 <td><?= h($filho->id) ?></td>
+                <td><?= h($filho->nome) ?></td>
                 <td><?= h($filho->email) ?></td>
+                <td><?php echo $this->Image->render($filho->image); ?> </td>
             </tr>
             <?php endforeach; ?>
         </table>

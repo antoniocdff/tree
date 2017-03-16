@@ -50,6 +50,33 @@ class AppController extends Controller
          */
         $this->loadComponent('Security');
         $this->loadComponent('Csrf');
+
+        $this->loadComponent('Auth', [
+            'loginRedirect' => [
+                'controller' => 'Usuarios',
+                'action' => 'index'
+            ],
+            'logoutRedirect' => [
+                'controller' => 'Usuarios',
+                'action' => 'login'
+            ],
+            'authenticate' => [
+                'Form' => [
+                    'userModel'=>'Usuarios'
+                ],
+                'Basic' => [
+                    'userModel'=>'Usuarios'
+                ]
+            ],
+            'loginAction'=> [
+                'controller'=>'Usuarios', 
+                'action'=>'login'
+            ],
+            'logoutAction'=> [
+                'controller'=>'Usuarios', 
+                'action'=>'logout'
+            ]
+        ]);
     }
 
     /**
@@ -60,6 +87,7 @@ class AppController extends Controller
      */
     public function beforeRender(Event $event)
     {
+        // $this->Auth->allow(['index', 'display']);
         if (!array_key_exists('_serialize', $this->viewVars) &&
             in_array($this->response->type(), ['application/json', 'application/xml'])
         ) {
