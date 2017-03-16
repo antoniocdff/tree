@@ -42,7 +42,7 @@ endif;
 </head>
 <body class="home">
 
-<div class="usuarios view large-9 medium-8 columns content">
+<div class="usuarios view large-9 medium-8 columns ">
     <h3><?= h($usuario->id) ?></h3>
     <table class="vertical-table">
         <tr>
