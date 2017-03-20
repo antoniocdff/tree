@@ -187,13 +187,13 @@ class UsuariosController extends AppController
     {
         if ($this->request->is('post')) {
             if (Validation::email($this->request->data['username'])) {
+                $this->request->data['email'] = $this->request->data['username'];
                 $this->Auth->config('authenticate', [
                     'Form' => [
                         'fields' => ['username' => 'email']
                     ]
                 ]);
                 $this->Auth->constructAuthenticate();
-                $this->request->data['email'] = $this->request->data['username'];
                 //unset($this->request->data['username']);
             }
             $user = $this->Auth->identify();
@@ -204,17 +204,6 @@ class UsuariosController extends AppController
             $this->Flash->error(__('Invalid username or password, try again'));
         }
     }
-
-
-    // public function login() {
-    //     if($this->request->is('post')) {
-    //         if(!$this->Auth->login()) {
-    //             $this->Session->setFlash(__('Invalid username or password, try again'));
-    //         } else {
-    //             $this->redirect($this->Auth->redirect());
-    //         }
-    //     }
-    // }
 
     public function logout()
     {

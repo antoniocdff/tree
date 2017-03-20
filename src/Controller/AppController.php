@@ -62,10 +62,12 @@ class AppController extends Controller
             ],
             'authenticate' => [
                 'Form' => [
-                    'userModel'=>'Usuarios'
+                    'userModel'=>'Usuarios',
+                    'fields' => ['username' => 'email']
                 ],
                 'Basic' => [
-                    'userModel'=>'Usuarios'
+                    'userModel'=>'Usuarios',
+                    'fields' => ['username' => 'email']
                 ]
             ],
             'loginAction'=> [

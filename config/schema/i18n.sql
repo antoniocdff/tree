@@ -15,4 +15,4 @@ CREATE TABLE i18n (
     PRIMARY KEY (id),
     UNIQUE INDEX I18N_LOCALE_FIELD(locale, model, foreign_key, field),
     INDEX I18N_FIELD(model, foreign_key, field)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

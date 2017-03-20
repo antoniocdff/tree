@@ -10,4 +10,4 @@ CREATE TABLE sessions (
   data text,
   expires INT(11) NOT NULL,
   PRIMARY KEY  (id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;

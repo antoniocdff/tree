@@ -230,7 +230,7 @@ return [
              */
             //'port' => 'non_standard_port_number',
             'username' => env('MYSQL_USER', 'root'),
-            'password' => env('MYSQL_PASSWORD', '123456'),
+            'password' => env('MYSQL_PASSWORD', '1qa1qa'),
             'database' => env('MYSQL_DATABASE', 'tree'),
             'encoding' => 'utf8',
             'timezone' => 'UTC',

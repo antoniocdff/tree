@@ -20,7 +20,7 @@ CREATE TABLE usuarios (
     FOREIGN KEY pai_key(pai_id) REFERENCES usuarios(id),
     FOREIGN KEY mae_key(mae_id) REFERENCES usuarios(id),
     FOREIGN KEY conjuge_key(conjuge_id) REFERENCES usuarios(id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE albuns (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -31,7 +31,7 @@ CREATE TABLE albuns (
     data_criacao DATETIME,
     data_atualizacao DATETIME,
     FOREIGN KEY usuario_key (usuario_id) REFERENCES usuarios(id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE musicas (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -43,7 +43,7 @@ CREATE TABLE musicas (
     data_atualizacao DATETIME,
     ordem INT NULL,
     FOREIGN KEY musica_key (usuario_id) REFERENCES usuarios(id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
 CREATE TABLE fotos (
     id INT AUTO_INCREMENT PRIMARY KEY,
@@ -54,5 +54,5 @@ CREATE TABLE fotos (
     data_criacao DATETIME,
     data_atualizacao DATETIME,
     FOREIGN KEY album_key (album_id) REFERENCES albuns(id)
-);
+) ENGINE=InnoDB DEFAULT CHARACTER SET=utf8;
 
