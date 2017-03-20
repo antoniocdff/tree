@@ -52,6 +52,8 @@ class AppController extends Controller
         $this->loadComponent('Csrf');
 
         $this->loadComponent('Auth', [
+            'authorize' => 'Controller',
+            'unauthorizedRedirect' => false,
             'loginRedirect' => [
                 'controller' => 'Usuarios',
                 'action' => 'index'
@@ -81,6 +83,17 @@ class AppController extends Controller
         ]);
     }
 
+    public function isAuthorized($user)
+    {
+        // Admin can access every action
+        if (isset($user['role']) && $user['role'] === 'admin') {
+            return true;
+        }
+
+        // Default deny
+        return false;
+    }
+
     /**
      * Before render callback.
      *
@@ -95,5 +108,10 @@ class AppController extends Controller
         ) {
             $this->set('_serialize', true);
         }
+        $usuario = '';
+        if($this->Auth) {
+            $usuario = $this->Auth->user();
+        }
+        $this->set('authUser', $usuario);
     }
 }

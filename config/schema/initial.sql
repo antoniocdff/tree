@@ -1,7 +1,7 @@
 CREATE TABLE usuarios (
     id INT AUTO_INCREMENT PRIMARY KEY,
     email VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
-    password VARCHAR(255) CHARACTER SET 'utf8',
+    password VARCHAR(255) CHARACTER SET 'utf8' NOT NULL,
     data_nascimento DATE,
     nome VARCHAR(255) CHARACTER SET 'utf8',
     texto TEXT CHARACTER SET 'utf8',

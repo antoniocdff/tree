@@ -5,6 +5,7 @@ use App\Controller\AppController;
 
 use Cake\ORM\TableRegistry;
 use Cake\Validation\Validation;
+use Cake\Event\Event;
 /**
  * Usuarios Controller
  *
@@ -13,20 +14,28 @@ use Cake\Validation\Validation;
 class UsuariosController extends AppController
 {
 
-    // public function beforeFilter(Event $event)
-    // {
-    //     parent::beforeFilter($event);
-    //     // Allow users to register and logout.
-    //     // You should not add the "login" action to allow list. Doing so would
-    //     // cause problems with normal functioning of AuthComponent.
-    //     $this->Auth->allow(['logout']);
-    // }
+    public function beforeFilter(Event $event)
+    {
+        parent::beforeFilter($event);
+        $this->Auth->allow(['logout', 'tree']);
+    }
 
-    /**
-     * Index method
-     *
-     * @return \Cake\Network\Response|null
-     */
+    public function isAuthorized($user)
+    {
+        if ($this->request->getParam('action') == 'tree') {
+            return true;
+        }
+
+        if (in_array($this->request->getParam('action'), ['edit', 'delete', 'view'])) {
+            $userId = (int)$this->request->getParam('pass.0');
+            if ($userId == $user['id']) {
+                return true;
+            }
+        }
+
+        return parent::isAuthorized($user);
+    }
+
     public function index()
     {
         $this->paginate = [ ];
@@ -35,14 +44,6 @@ class UsuariosController extends AppController
         $this->set(compact('usuarios'));
         $this->set('_serialize', ['usuarios']);
     }
-
-    /**
-     * View method
-     *
-     * @param string|null $id Usuario id.
-     * @return \Cake\Network\Response|null
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function view($id = null)
     {
         $usuario = $this->Usuarios->get($id, [
@@ -53,11 +54,6 @@ class UsuariosController extends AppController
         $this->set('_serialize', ['usuario']);
     }
 
-    /**
-     * Add method
-     *
-     * @return \Cake\Network\Response|null Redirects on successful add, renders view otherwise.
-     */
     public function add()
     {
         $usuario = $this->Usuarios->newEntity();
@@ -75,13 +71,6 @@ class UsuariosController extends AppController
         $this->set('_serialize', ['usuario']);
     }
 
-    /**
-     * Edit method
-     *
-     * @param string|null $id Usuario id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function edit($id = null)
     {
         $usuario = $this->Usuarios->get($id, [
@@ -124,13 +113,6 @@ class UsuariosController extends AppController
         $this->set('_serialize', ['usuario']);
     }
 
-    /**
-     * Delete method
-     *
-     * @param string|null $id Usuario id.
-     * @return \Cake\Network\Response|null Redirects to index.
-     * @throws \Cake\Datasource\Exception\RecordNotFoundException When record not found.
-     */
     public function delete($id = null)
     {
         $this->request->allowMethod(['post', 'delete']);
@@ -144,13 +126,6 @@ class UsuariosController extends AppController
         return $this->redirect(['action' => 'index']);
     }
 
-    /**
-     * View tree method
-     *
-     * @param string|null $id Usuario id.
-     * @return \Cake\Network\Response|null Redirects on successful edit, renders view otherwise.
-     * @throws \Cake\Network\Exception\NotFoundException When record not found.
-     */
     public function tree($id = null)
     {
         $usuario = $this->Usuarios->get($id, [
@@ -185,6 +160,9 @@ class UsuariosController extends AppController
 
     public function login()
     {
+        if($this->Auth->user()) {
+            return $this->redirect(['action' => 'index']);
+        }
         if ($this->request->is('post')) {
             if (Validation::email($this->request->data['username'])) {
                 $this->request->data['email'] = $this->request->data['username'];
@@ -194,7 +172,6 @@ class UsuariosController extends AppController
                     ]
                 ]);
                 $this->Auth->constructAuthenticate();
-                //unset($this->request->data['username']);
             }
             $user = $this->Auth->identify();
             if ($user) {

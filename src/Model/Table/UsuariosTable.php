@@ -95,7 +95,7 @@ class UsuariosTable extends Table
             ->notEmpty('email');
 
         $validator
-            ->allowEmpty('password');
+            ->notEmpty('password');
 
         $validator
             ->date('data_nascimento')
@@ -138,6 +138,13 @@ class UsuariosTable extends Table
         $validator
             ->dateTime('data_acesso')
             ->allowEmpty('data_acesso');
+
+        $validator
+            ->notEmpty('role', 'A role is required')
+            ->add('role', 'inList', [
+                'rule' => ['inList', ['admin', 'comum']],
+                'message' => 'Please enter a valid role'
+            ]);
 
         return $validator;
     }
